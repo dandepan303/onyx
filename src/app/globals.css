@@ -62,7 +62,7 @@ html, body {
   display: flex;
   justify-content: center;
   transition: opacity 0.5s ease-in-out;
-  margin-bottom: 1.25rem; /* Added extra space here */
+  margin-bottom: 1.2rem; /* Added extra space here */
 }
 
 
@@ -191,7 +191,7 @@ html, body {
 .dialog-content input::placeholder {
   color: #cccccc !important;
   opacity: 1;
-  font-weight: 500 !important;
+  font-weight: 300 !important;  /* lighter to match subtitle */
 }
 
 .sign-in-btn {
