@@ -1,0 +1,40 @@
+Key Features:
+  Playback:
+  ▫ Playlists from spotify
+  ▫ Time synced playback
+
+  UX:
+  ▫ Sign in & sign up in same page
+  
+  Parties:
+  ▫ Party codes
+  ▫ Password protected party
+  
+  Roles:
+    ▫ Admin
+        ▫ Can change roles and has full perm
+    ▫ Member
+      ▫ Modify current song
+        ▫ Pause + skip, chooose song
+        ▫ Only pause + skip
+      ▫ Modify queue
+        ▫ Add, remove
+        ▫ Only add to queue
+
+Tech Stack:
+  Playback:
+    ▫ (1) Spotify Playlist API
+    ▫ (2) Youtube Playback API + Timestamped playback
+  
+  UX: 
+    ▫ Page 1
+      ▫ input:
+        ▫ email or name
+        ▫ password
+      ▫ if user.email == input.name || user.username == input.name -> sign in logic (ie. user exists)
+      ▫ else -> sign up logic (page 2)
+    ▫ page 2
+      ▫ input:
+        ▫ if input.name is email -> ask for username
+        ▫ if input.name is not email -> ask for email
+      ▫ sign up logic
