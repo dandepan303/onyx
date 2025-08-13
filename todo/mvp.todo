@@ -22,19 +22,92 @@ Key Features:
         ▫ Only add to queue
 
 Tech Stack:
+  Auth:
+    ▫ Supabase
+
+  DB:
+    ▫ Supabase
+    ▫ Prisma
+
   Playback:
     ▫ (1) Spotify Playlist API
     ▫ (2) Youtube Playback API + Timestamped playback
   
-  UX: 
-    ▫ Page 1
-      ▫ input:
-        ▫ email or name
-        ▫ password
-      ▫ if user.email == input.name || user.username == input.name -> sign in logic (ie. user exists)
-      ▫ else -> sign up logic (page 2)
-    ▫ page 2
-      ▫ input:
-        ▫ if input.name is email -> ask for username
-        ▫ if input.name is not email -> ask for email
-      ▫ sign up logic
+  Signup/Signin: 
+    ▫ Input:
+      ▫ email
+      ▫ password
+    ▫ if email exists -> sign in
+    ▫ if email doesn't exist -> sign up step 2
+    ▫ sign up step 2: confirm password
+
+Pages:
+  ▫ /
+  ▫ /auth
+    ▫ Auth
+  ▫ /party
+    ▫ Party
+  ▫ /party?id=[]
+    ▫ Music player
+    ▫ Roles management
+
+Components:
+  Auth:
+    ▫ AuthProtecter
+      ▫ if no user (auth-provider) -> Auth
+      ▫ if no spotify (api: user) -> Connect spotify
+    ▫ Auth
+      ▫ GoogleButton -> api/auth/google
+      ▫ useState<email, password>();
+      ▫ Auth step 1 -> api/auth/auth
+      ▫ Auth step 2 -> api/auth/email
+    ▫ Connect spotify
+
+  Party:
+    ▫ Join party -> api/party/join
+    ▫ Create party -> api/party/create
+  
+  Party?id=[]:
+    ▫ Music player
+    ▫ Subscribe to party data
+
+  Roles Management:
+    ▫ Subscribe to party's role data
+      ▫ Email, Role
+
+APIs:
+  Auth:
+    ▫ /auth
+      ▫ if sign in works -> status: signin-success
+      ▫ if sign in doesn't work & email exists -> status: wrong-password
+      ▫ if sign in doesn't work & email doens't exist -> status: signup-required
+      ▫ if error -> status: error, message: await parseError(error)
+    ▫ /email
+      ▫ if email exists -> status: existing-account
+      ▫ if email doesn't exist & auth + db sign up success -> success
+      ▫ if error -> status: error, message: await parseError(error)
+    ▫ /google
+      ▫ if db email exists
+        ▫ if sign in success -> status: signin-success
+        ▫ if error -> status: error, message: await parseError(error)
+      ▫ if db email doesn't exist
+        ▫ if auth + db sign up success -> status: signup-success
+        ▫ ▫ if error -> status: error, message: await parseError(error)
+  Party:
+    ▫ /create
+      ▫ if no user (api) -> status: error, messsage: Please sign in to create a party
+      ▫ (db) create a new party with admin as current user
+        ▫ if success -> status: success, partyId: party_id
+        ▫ if error -> status: error, message: await parseError(error)
+    ▫ /join
+      ▫ body: partyId
+      ▫ if no user (api) -> status: error, messsage: Please sign in to create a party
+      ▫ if no party w/ partyId (db) -> status: error, message: Could not find this party
+      ▫ if user not in party (db) -> add user to party as member
+        ▫ if success -> status: success, message: Successfully joined party
+        ▫ if error -> status: error, message: There was an issue joining this party
+  Music Player:
+    ▫ subscribe to data
+      ▫ current song
+      ▫ start timestamp of song (delta between now and start can be used to get exact timing)
+      ▫

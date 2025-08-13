@@ -1,8 +1,8 @@
-'use client'
-import Image from 'next/image'
-import { useState, ChangeEvent } from 'react'
-import Head from 'next/head'
-import { MdArrowForwardIos } from 'react-icons/md'
+'use client';
+import Image from 'next/image';
+import { useState, ChangeEvent } from 'react';
+import Head from 'next/head';
+import { MdArrowForwardIos } from 'react-icons/md';
 
 // Types
 interface User {
@@ -15,205 +15,201 @@ interface User {
 const mockUsers: User[] = [
   { email: 'dandepan303@gmail.com', username: 'dean', password: '123456' },
   { email: 'kevinboriboonsomsin@gmail.com', username: 'kevin', password: '123456' },
-]
+];
 
 // Helper function to check if input is email format
 const isEmail = (input: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(input)
-}
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(input);
+};
 
 // Helper function to find user by email or username
 const findUser = (identifier: string): User | undefined => {
-  return mockUsers.find(user => 
-    user.email === identifier || user.username === identifier
-  )
-}
+  return mockUsers.find(user => user.email === identifier || user.username === identifier);
+};
 
 export default function Home() {
-  const [fadeOut, setFadeOut] = useState(false)
-  const [center, setCenter] = useState(false)
-  const [morph, setMorph] = useState(false)
-  const [dialogVisible, setDialogVisible] = useState(false)
-  const [dialogFadeIn, setDialogFadeIn] = useState(false)
-  const [showButtons, setShowButtons] = useState(false)
-  const [buttonsVisible, setButtonsVisible] = useState(false)
-  const [joinMode, setJoinMode] = useState(false)
-  const [joinFadeIn, setJoinFadeIn] = useState(false)
-  const [createMode, setCreateMode] = useState(false)
-  const [createFadeIn, setCreateFadeIn] = useState(false)
+  const [fadeOut, setFadeOut] = useState(false);
+  const [center, setCenter] = useState(false);
+  const [morph, setMorph] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogFadeIn, setDialogFadeIn] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
+  const [buttonsVisible, setButtonsVisible] = useState(false);
+  const [joinMode, setJoinMode] = useState(false);
+  const [joinFadeIn, setJoinFadeIn] = useState(false);
+  const [createMode, setCreateMode] = useState(false);
+  const [createFadeIn, setCreateFadeIn] = useState(false);
 
   // Auth state
-  const [authPage, setAuthPage] = useState(1) // 1 for sign in, 2 for sign up
-  const [nameOrEmail, setNameOrEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [error, setError] = useState('')
+  const [authPage, setAuthPage] = useState(1); // 1 for sign in, 2 for sign up
+  const [nameOrEmail, setNameOrEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [error, setError] = useState('');
 
   const handleGetStarted = () => {
-    setFadeOut(true)
+    setFadeOut(true);
     setTimeout(() => {
-      setCenter(true)
+      setCenter(true);
       setTimeout(() => {
-        setMorph(true)
+        setMorph(true);
         setTimeout(() => {
-          setDialogVisible(true)
-          setTimeout(() => setDialogFadeIn(true), 250)
-        }, 500)
-      }, 900)
-    }, 500)
-  }
+          setDialogVisible(true);
+          setTimeout(() => setDialogFadeIn(true), 250);
+        }, 500);
+      }, 900);
+    }, 500);
+  };
 
   const handleSignIn = () => {
-    setError('')
+    setError('');
 
     if (!nameOrEmail || !password) {
-      setError('please fill in all fields')
-      return
+      setError('please fill in all fields');
+      return;
     }
 
     // Check if user exists
-    const user = findUser(nameOrEmail)
-    
+    const user = findUser(nameOrEmail);
+
     if (user && user.password === password) {
       // User exists and password matches - sign in
-      console.log('sign in successful:', user)
-      proceedToLobby()
+      console.log('sign in successful:', user);
+      proceedToLobby();
     } else if (user && user.password !== password) {
       // User exists but wrong password
-      setError('incorrect password')
+      setError('incorrect password');
     } else {
       // User doesn't exist - go to sign up page
-      setAuthPage(2)
-      
+      setAuthPage(2);
+
       // Pre-populate fields based on input type
       if (isEmail(nameOrEmail)) {
-        setEmail(nameOrEmail)
-        setUsername('')
+        setEmail(nameOrEmail);
+        setUsername('');
       } else {
-        setUsername(nameOrEmail)
-        setEmail('')
+        setUsername(nameOrEmail);
+        setEmail('');
       }
     }
-  }
+  };
 
   const handleSignUp = () => {
-    setError('')
+    setError('');
 
     if (!email || !username || !password) {
-      setError('please fill in all fields')
-      return
+      setError('please fill in all fields');
+      return;
     }
 
     if (!isEmail(email)) {
-      setError('please enter a valid email address')
-      return
+      setError('please enter a valid email address');
+      return;
     }
 
     // Check if email or username already exists
-    const existingUser = mockUsers.find(user => 
-      user.email === email || user.username === username
-    )
+    const existingUser = mockUsers.find(user => user.email === email || user.username === username);
 
     if (existingUser) {
       if (existingUser.email === email) {
-        setError('email already exists')
+        setError('email already exists');
       } else {
-        setError('username already taken')
+        setError('username already taken');
       }
-      return
+      return;
     }
 
     // Create new user (in real app, this would be an API call)
-    const newUser: User = { email, username, password }
-    mockUsers.push(newUser)
-    console.log('sign up successful:', newUser)
-    
-    proceedToLobby()
-  }
+    const newUser: User = { email, username, password };
+    mockUsers.push(newUser);
+    console.log('sign up successful:', newUser);
+
+    proceedToLobby();
+  };
 
   const proceedToLobby = () => {
     // Reset auth state
-    setAuthPage(1)
-    setNameOrEmail('')
-    setPassword('')
-    setEmail('')
-    setUsername('')
-    setError('')
-    
+    setAuthPage(1);
+    setNameOrEmail('');
+    setPassword('');
+    setEmail('');
+    setUsername('');
+    setError('');
+
     // Fade out the dialog content
-    setDialogFadeIn(false)
-    
+    setDialogFadeIn(false);
+
     setTimeout(() => {
       // Hide dialog and show buttons
-      setDialogVisible(false)
-      setShowButtons(true)
-      
+      setDialogVisible(false);
+      setShowButtons(true);
+
       setTimeout(() => {
         // Fade in the buttons
-        setButtonsVisible(true)
-      }, 100)
-    }, 300)
-  }
+        setButtonsVisible(true);
+      }, 100);
+    }, 300);
+  };
 
   const handleBackToSignIn = () => {
-    setAuthPage(1)
-    setError('')
-    setEmail('')
-    setUsername('')
-  }
+    setAuthPage(1);
+    setError('');
+    setEmail('');
+    setUsername('');
+  };
 
   const handleJoin = () => {
     // Fade out everything except join button
-    setButtonsVisible(false)
-    
+    setButtonsVisible(false);
+
     setTimeout(() => {
       // Switch to join mode
-      setJoinMode(true)
-      
+      setJoinMode(true);
+
       setTimeout(() => {
         // Fade in the textbox
-        setJoinFadeIn(true)
-      }, 100)
-    }, 300)
-  }
+        setJoinFadeIn(true);
+      }, 100);
+    }, 300);
+  };
 
   const handleCreate = () => {
     // Fade out everything except create button
-    setButtonsVisible(false)
-    
+    setButtonsVisible(false);
+
     setTimeout(() => {
       // Switch to create mode
-      setCreateMode(true)
-      
+      setCreateMode(true);
+
       setTimeout(() => {
         // Fade in the room code display
-        setCreateFadeIn(true)
-      }, 100)
-    }, 300)
-  }
+        setCreateFadeIn(true);
+      }, 100);
+    }, 300);
+  };
 
   const handleBackToLobby = () => {
     // Fade out current content
     if (joinMode) {
-      setJoinFadeIn(false)
+      setJoinFadeIn(false);
     }
     if (createMode) {
-      setCreateFadeIn(false)
+      setCreateFadeIn(false);
     }
-    
+
     setTimeout(() => {
       // Reset modes
-      setJoinMode(false)
-      setCreateMode(false)
-      
+      setJoinMode(false);
+      setCreateMode(false);
+
       setTimeout(() => {
         // Fade in the lobby buttons
-        setButtonsVisible(true)
-      }, 100)
-    }, 300)
-  }
+        setButtonsVisible(true);
+      }, 100);
+    }, 300);
+  };
 
   return (
     <>
@@ -224,37 +220,23 @@ export default function Home() {
         <div className={`content ${center ? 'center-content' : ''}`}>
           <h1 className={`title ${fadeOut ? 'hidden-content' : ''}`}>onyx</h1>
           <div className={`mockup-container ${fadeOut ? 'hidden-content' : ''}`}>
-            <Image
-              src="/macbook.png"
-              alt="MacBook mockup"
-              width={700}
-              height={525}
-              className="mockup-image"
-              priority
-            />
+            <Image src="/macbook.png" alt="MacBook mockup" width={700} height={525} className="mockup-image" priority />
           </div>
-          <p className={`subtitle ${fadeOut ? 'hidden-content' : ''}`}>
-            collaborative jamming made easy
-          </p>
-          <div
-            className={`morph-container ${morph ? 'morphing' : ''}`}
-            onClick={!morph ? handleGetStarted : undefined}
-          >
-            {!dialogVisible && !showButtons && (
-              <div className="btn-content">get started</div>
-            )}
-            
+          <p className={`subtitle ${fadeOut ? 'hidden-content' : ''}`}>collaborative jamming made easy</p>
+          <div className={`morph-container ${morph ? 'morphing' : ''}`} onClick={!morph ? handleGetStarted : undefined}>
+            {!dialogVisible && !showButtons && <div className="btn-content">get started</div>}
+
             {dialogVisible && authPage === 1 && (
               <div className={`dialog-content ${dialogFadeIn ? 'fade-in' : ''}`}>
-                <input 
-                  type="text" 
-                  placeholder="email or username" 
+                <input
+                  type="text"
+                  placeholder="email or username"
                   value={nameOrEmail}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNameOrEmail(e.target.value)}
                 />
-                <input 
-                  type="password" 
-                  placeholder="password" 
+                <input
+                  type="password"
+                  placeholder="password"
                   value={password}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
@@ -269,23 +251,18 @@ export default function Home() {
               <div className={`dialog-content ${dialogFadeIn ? 'fade-in' : ''}`}>
                 <h2>sign up</h2>
                 {isEmail(nameOrEmail) ? (
-                  <input 
-                    type="text" 
-                    placeholder="username" 
+                  <input
+                    type="text"
+                    placeholder="username"
                     value={username}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                   />
                 ) : (
-                  <input 
-                    type="email" 
-                    placeholder="email" 
-                    value={email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                  />
+                  <input type="email" placeholder="email" value={email} onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} />
                 )}
-                <input 
-                  type="password" 
-                  placeholder="password" 
+                <input
+                  type="password"
+                  placeholder="password"
                   value={password}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
@@ -346,5 +323,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
