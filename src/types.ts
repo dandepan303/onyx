@@ -1,7 +1,3 @@
-// DATABASE
-
-export type Role = 'admin' | 'user' | 'guest';
-
 // API ENDPOINTs
 
 export type DefaultAPIRet = {

@@ -124,6 +124,7 @@ exports.Prisma.ProfileScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
+  role: 'role',
   conntectedSpotify: 'conntectedSpotify',
   nextConnectSpotify: 'nextConnectSpotify'
 };
@@ -169,6 +170,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.UserRoles = exports.$Enums.UserRoles = {
+  GUEST: 'GUEST',
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
 exports.PlaybackStatus = exports.$Enums.PlaybackStatus = {
   PLAYING: 'PLAYING',
   PAUSED: 'PAUSED'

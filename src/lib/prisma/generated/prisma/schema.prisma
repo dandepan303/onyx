@@ -13,6 +13,7 @@ model Profile {
   id                 String       @id
   name               String?
   email              String       @unique
+  role               UserRoles
   conntectedSpotify  Boolean      @default(false)
   nextConnectSpotify DateTime     @default(now())
   partyMemberships   PartyMember? @relation("PartyMembers")
@@ -70,6 +71,12 @@ model QueueItem {
 
   @@index([partyId])
   @@map("queue_item")
+}
+
+enum UserRoles {
+  GUEST
+  USER
+  ADMIN
 }
 
 enum PlaybackStatus {

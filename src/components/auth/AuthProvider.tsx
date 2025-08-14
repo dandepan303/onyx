@@ -2,18 +2,17 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
+import { Profile } from '@/lib/prisma/generated/prisma';
 import { supabase } from '@/lib/supabase/client';
 import axios from 'axios';
-import { config } from '@/lib/config';
 import { parseError } from '@/lib/util/server_util';
 
 interface AuthContextType {
   user: { data: User | null; loading: boolean };
-  profile: { data: AppUser | null; loading: boolean };
+  profile: { data: Profile | null; loading: boolean };
   session: { data: Session | null; loading: boolean };
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<AppUser>) => Promise<void>;
   getUser: () => Promise<User | null>;
   version: number;
 }
@@ -79,23 +78,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await supabase.auth.signOut();
   };
 
-  const updateProfile = async (updates: Partial<AppUser>) => {
-    if (!user.data) return;
-
-    try {
-      const { data, error } = await supabase.from('profiles').update(updates).eq('id', user?.data?.id).select().single();
-
-      if (error) {
-        console.log('Error updating profile:', error);
-        return;
-      }
-
-      setProfile({ data: data, loading: false });
-    } catch (error) {
-      console.log('Error updating profile:', error);
-    }
-  };
-
   const getUser = async () => {
     try {
       const {
@@ -118,22 +100,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   useEffect(() => {
-    // Add a timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       console.warn('Auth loading timeout - forcing loading states to false');
       setUser(prev => ({ data: prev.data, loading: false }));
       setProfile(prev => ({ data: prev.data, loading: false }));
       setSession(prev => ({ data: prev.data, loading: false }));
-    }, 10000); // 10 second timeout
+    }, 10000);
 
     // Get initial session
     supabase.auth
       .getSession()
       .then(async ({ data: { session } }) => {
+        // Update info
         setSession({ data: session, loading: false });
         setUser({ data: session?.user ?? null, loading: false });
-
-        // Always call fetchProfile - it will handle null session appropriately
         await fetchProfile(session);
 
         setVersion(v => v + 1);
@@ -154,12 +134,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setSession({ data: session, loading: false });
       setUser({ data: session?.user ?? null, loading: false });
 
+      if (event === 'SIGNED_OUT') {
+        setProfile({ data: null, loading: false });
+      } else {
+        await fetchProfile(session);
+      }
+
       if (event === 'SIGNED_IN' && session?.user) {
         await fetchProfile(session);
       } else if (event === 'SIGNED_OUT') {
         setProfile({ data: null, loading: false });
       } else {
-        // Handle other events where session might be null
         await fetchProfile(session);
       }
 
@@ -172,15 +157,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [fetchProfile]);
 
-  // Debug logging
-  useEffect(() => {
-      console.log('Auth state:', {
-        user: { data: !!user.data, loading: user.loading },
-        profile: { data: !!profile?.data, loading: profile.loading },
-        session: { data: !!session.data, loading: session.loading },
-        version,
-      });
-  }, [user, profile, session, version]);
+  // // Debug logging
+  // useEffect(() => {
+  //   console.log('Auth state:', {
+  //     user: { data: !!user.data, loading: user.loading },
+  //     profile: { data: !!profile?.data, loading: profile.loading },
+  //     session: { data: !!session.data, loading: session.loading },
+  //     version,
+  //   });
+  // }, [user, profile, session, version]);
 
   const value = {
     user,
@@ -188,7 +173,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     session,
     signIn,
     signOut,
-    updateProfile,
     getUser,
     version,
   };
