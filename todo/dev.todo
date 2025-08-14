@@ -1,4 +1,9 @@
 Dean:
 
 Kevin:
+  ▫ Redo auth provider
+  ▫ Surround layout with auth provider
+  ▫ Redo auth protector
+  ▫ Surround layout with auth protector
+  ▫ Validate scheam
   ▫ Figure out how to subscribe /party to somewhere so that /party role updates when there is a change

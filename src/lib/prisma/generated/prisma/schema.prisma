@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/lib/prisma/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Profile {
+  id                 String       @id
+  name               String?
+  email              String       @unique
+  conntectedSpotify  Boolean      @default(false)
+  nextConnectSpotify DateTime     @default(now())
+  partyMemberships   PartyMember? @relation("PartyMembers")
+
+  @@map("profile")
+}
+
+model Party {
+  id           String         @id
+  name         String
+  positionMS   Int            @default(0)
+  startedAt    DateTime?
+  status       PlaybackStatus @default(PLAYING)
+  autoplay     AutoplayType   @default(REPEAT)
+  headId       String?        @unique
+  tailId       String?        @unique
+  currentId    String?        @unique
+  queueCurrent QueueItem?     @relation("QueueCurrent", fields: [currentId], references: [id])
+  queueHead    QueueItem?     @relation("QueueHead", fields: [headId], references: [id])
+  queueTail    QueueItem?     @relation("QueueTail", fields: [tailId], references: [id])
+  members      PartyMember[]  @relation("Party")
+  queue        QueueItem[]    @relation("Queue")
+
+  @@map("party")
+}
+
+model PartyMember {
+  id          String    @id
+  permissions Boolean[]
+  userId      String    @unique
+  partyId     String
+  party       Party     @relation("Party", fields: [partyId], references: [id])
+  user        Profile   @relation("PartyMembers", fields: [userId], references: [id])
+
+  @@unique([partyId, userId])
+  @@index([partyId])
+  @@index([userId])
+  @@map("party_member")
+}
+
+model QueueItem {
+  id           String     @id @default(uuid())
+  status       ItemStatus
+  partyId      String
+  prevId       String?    @unique
+  nextId       String?    @unique
+  queueCurrent Party?     @relation("QueueCurrent")
+  queueHead    Party?     @relation("QueueHead")
+  queueTail    Party?     @relation("QueueTail")
+  next         QueueItem? @relation("NextItem", fields: [nextId], references: [id])
+  nextItem     QueueItem? @relation("NextItem")
+  party        Party      @relation("Queue", fields: [partyId], references: [id], onDelete: Cascade)
+  prev         QueueItem? @relation("PrevItem", fields: [prevId], references: [id])
+  prevItem     QueueItem? @relation("PrevItem")
+
+  @@index([partyId])
+  @@map("queue_item")
+}
+
+enum PlaybackStatus {
+  PLAYING
+  PAUSED
+}
+
+enum AutoplayType {
+  REPEAT
+  SHUFFLE
+  DISABLED
+}
+
+enum ItemStatus {
+  PREVIOUS
+  CURRENT
+  NEXT
+}

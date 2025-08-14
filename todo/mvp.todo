@@ -15,11 +15,11 @@ Key Features:
         ▫ Can change roles and has full perm
     ▫ Member
       ▫ Modify current song
-        ▫ Pause + skip, chooose song
-        ▫ Only pause + skip
+        ▫ (1) Pause + move
+        ▫ (2) Pause + move, chooose song
       ▫ Modify queue
-        ▫ Add, remove
-        ▫ Only add to queue
+        ▫ (1) Only add to queue
+        ▫ (2) Add, remove
 
 Tech Stack:
   Auth:
@@ -41,21 +41,24 @@ Tech Stack:
     ▫ if email doesn't exist -> sign up step 2
     ▫ sign up step 2: confirm password
 
+Layout:
+  ▫ html > AuthProvider > AuthProtector > children
 Pages:
   ▫ /
-  ▫ /auth
-    ▫ Auth
   ▫ /party
-    ▫ Party
+    ▫ Party management: join/create party
   ▫ /party?id=[]
-    ▫ Music player
-    ▫ Roles management
+    ▫ Song display
+    ▫ Music player (bottom bar)
+    ▫ Roles management (fullscreen popup)
+    ▫ Queue mangement (fullscreen popup)
 
-Components:
-  Auth:
+Pages & Components:
+  /auth:
     ▫ AuthProtecter
       ▫ if no user (auth-provider) -> Auth
       ▫ if no spotify (api: user) -> Connect spotify
+      ▫ {children}
     ▫ Auth
       ▫ GoogleButton -> api/auth/google
       ▫ useState<email, password>();
@@ -63,20 +66,32 @@ Components:
       ▫ Auth step 2 -> api/auth/email
     ▫ Connect spotify
 
-  Party:
+  /party:
     ▫ Join party -> api/party/join
     ▫ Create party -> api/party/create
   
-  Party?id=[]:
+  /party?id=[]:
     ▫ Music player
-    ▫ Subscribe to party data
+    ▫ Music manager
+      ▫ Pause
+      ▫ Change
+      ▫ Add queue
+      ▫ Remove queue
+      ▫ Move
 
-  Roles Management:
+  /roles:
     ▫ Subscribe to party's role data
       ▫ Email, Role
 
 APIs:
-  Auth:
+  /profile:
+    ▫ /get?id=[]
+      ▫ if no id
+        ▫ if no user[auth] -> status: error
+        ▫ status: success, data: private user[auth] data
+      ▫ if no user[auth] & user[id] -> status: success, data: public user[id] data
+
+  /auth:
     ▫ /auth
       ▫ if sign in works -> status: signin-success
       ▫ if sign in doesn't work & email exists -> status: wrong-password
@@ -93,7 +108,7 @@ APIs:
       ▫ if db email doesn't exist
         ▫ if auth + db sign up success -> status: signup-success
         ▫ ▫ if error -> status: error, message: await parseError(error)
-  Party:
+  /party:
     ▫ /create
       ▫ if no user (api) -> status: error, messsage: Please sign in to create a party
       ▫ (db) create a new party with admin as current user
@@ -103,11 +118,72 @@ APIs:
       ▫ body: partyId
       ▫ if no user (api) -> status: error, messsage: Please sign in to create a party
       ▫ if no party w/ partyId (db) -> status: error, message: Could not find this party
+      ▫ if user.party
       ▫ if user not in party (db) -> add user to party as member
         ▫ if success -> status: success, message: Successfully joined party
         ▫ if error -> status: error, message: There was an issue joining this party
-  Music Player:
-    ▫ subscribe to data
-      ▫ current song
-      ▫ start timestamp of song (delta between now and start can be used to get exact timing)
-      ▫
+  /music-player:
+    ▫ /subscription?id=[]
+      ▫ if no party -> status: error, message: Issue retrieving party data
+      ▫ status: success, data: [next]
+        ▫ current song
+        ▫ start timestamp of song (delta between now and start can be used to get exact timing)
+    ▫ play song logic
+  /music-manager:
+    ▫ /all?id=[]
+      ▫ if no user -> status: error, message: Please sign in
+      ▫ if no party[id] -> status: error, message: Please join or create a party
+    ▫ /playback?id=[]
+      ▫ params: play_flag
+      ▫ prisma.tx(party.play_status = play_flag)
+    ▫ /change?id=[]
+      ▫ params: amount
+      ▫ if no amount -> status: error, message: Developer issue - include all body info
+      next() {
+        const next = queue.current.next ?? queue.head
+        prisma.tx(queue.current = next)
+      }
+      prev() {
+        const prev = queue.current.prev ?? queue.tail
+        prisma.tx(queue.current = prev)
+      }
+    ▫ /add?id=[]
+      ▫ params: songId or songData
+      ▫ if no songId || no items[songId] -> status: error, message: Please choose a valid song to add
+      add() {
+        const item = prisma.queue_item.create(itemId, prev=queue.tail)
+        if (!queue.head) {
+          prisma.tx(
+            queue.head = item
+            queue.current = item
+            queue.tail = item
+          )  
+        } else {
+          prisma.tx(
+            queue.tail.next = item
+            queue.tail = item
+          )
+        }
+      }
+    ▫ /remove?id=[]
+      ▫ params: itemId
+      remove() {
+        const item = prisma.queue_item.where({id: itemId, partyId: id});
+        if (!item) return NextResponse.json({status: 'error', message: 'Failed to remove ${item.name} from queue'})
+
+        if (item.head.id === itemId) {
+          item.head = item.next
+        } else if (item.tail === itemId) {
+          item.tail = item.prev
+        } else {
+          item.prev.next = item.next
+          item.next.prev = item.prev
+        }
+
+        prisma.queue_item.delete(id: itemId)
+      }
+    
+  /roles:
+    ▫ /subscription?id=[]
+      ▫ if no party -> status: error, message: Issue retrieving party data
+      ▫ status: success, data: party data
