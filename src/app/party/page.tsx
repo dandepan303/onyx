@@ -1,3 +1,5 @@
+'use client';
+
 import MusicPlayer from '@/components/party/MusicPlayer';
 import PartyManagement from '@/components/party/PartyManagement';
 import QueueManagement from '@/components/party/QueueManagement';

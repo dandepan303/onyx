@@ -55,7 +55,7 @@ Pages:
 
 Pages & Components:
   /auth:
-    ▫ AuthProtecter
+    ✔ AuthProtecter @started(25-08-14 14:05) @done(25-08-14 14:05) @lasted(29s)
       ▫ if no user (auth-provider) -> Auth
       ▫ if no spotify (api: user) -> Connect spotify
       ▫ {children}

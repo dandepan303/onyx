@@ -11,7 +11,7 @@ interface AuthContextType {
   user: { data: User | null; loading: boolean };
   profile: { data: Profile | null; loading: boolean };
   session: { data: Session | null; loading: boolean };
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   getUser: () => Promise<User | null>;
   version: number;
@@ -64,13 +64,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       return { error };
-    } catch (error) {
-      return { error: error as Error };
+    } catch (error: any) {
+      return { error };
     }
   };
 
@@ -157,7 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [fetchProfile]);
 
-  // // Debug logging
+  // logging
   // useEffect(() => {
   //   console.log('Auth state:', {
   //     user: { data: !!user.data, loading: user.loading },

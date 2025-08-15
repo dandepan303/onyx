@@ -10,12 +10,12 @@ datasource db {
 }
 
 model Profile {
-  id                 String        @id
-  name               String?
-  email              String        @unique
-  role UserRoles
-  conntectedSpotify  Boolean       @default(false)
-  nextConnectSpotify DateTime      @default(now())
+  id                 String       @id
+  name               String
+  email              String       @unique
+  conntectedSpotify  Boolean      @default(false)
+  nextConnectSpotify DateTime     @default(now())
+  role               UserRoles
   partyMemberships   PartyMember? @relation("PartyMembers")
 
   @@map("profile")
@@ -43,7 +43,7 @@ model Party {
 model PartyMember {
   id          String    @id
   permissions Boolean[]
-  userId      String @unique
+  userId      String    @unique
   partyId     String
   party       Party     @relation("Party", fields: [partyId], references: [id])
   user        Profile   @relation("PartyMembers", fields: [userId], references: [id])

@@ -34,39 +34,6 @@ export default function MusicPlayer({ tracks = defaultTracks }: MusicPlayerProps
   const progressRef = useRef<HTMLDivElement>(null);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const handleEnded = () => {
-      if (repeat) {
-        audio.currentTime = 0;
-        audio.play();
-      } else {
-        handleNext();
-      }
-    };
-
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('ended', handleEnded);
-
-    return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, [currentTrack, repeat]);
-
   const togglePlay = async () => {
     if (!audioRef.current) return;
 
@@ -135,6 +102,39 @@ export default function MusicPlayer({ tracks = defaultTracks }: MusicPlayerProps
 
   const currentTrackData = tracks[currentTrack];
   const progress = currentTrackData ? (currentTime / currentTrackData.duration) * 100 : 0;
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const handleEnded = () => {
+      if (repeat) {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        handleNext();
+      }
+    };
+
+    audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [currentTrack, repeat, handleNext]);
 
   return (
     <div className={`music-player ${isVisible ? 'fade-in' : ''}`}>

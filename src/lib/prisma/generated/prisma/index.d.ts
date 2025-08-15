@@ -1238,27 +1238,27 @@ export namespace Prisma {
     id: string | null
     name: string | null
     email: string | null
-    role: $Enums.UserRoles | null
     conntectedSpotify: boolean | null
     nextConnectSpotify: Date | null
+    role: $Enums.UserRoles | null
   }
 
   export type ProfileMaxAggregateOutputType = {
     id: string | null
     name: string | null
     email: string | null
-    role: $Enums.UserRoles | null
     conntectedSpotify: boolean | null
     nextConnectSpotify: Date | null
+    role: $Enums.UserRoles | null
   }
 
   export type ProfileCountAggregateOutputType = {
     id: number
     name: number
     email: number
-    role: number
     conntectedSpotify: number
     nextConnectSpotify: number
+    role: number
     _all: number
   }
 
@@ -1267,27 +1267,27 @@ export namespace Prisma {
     id?: true
     name?: true
     email?: true
-    role?: true
     conntectedSpotify?: true
     nextConnectSpotify?: true
+    role?: true
   }
 
   export type ProfileMaxAggregateInputType = {
     id?: true
     name?: true
     email?: true
-    role?: true
     conntectedSpotify?: true
     nextConnectSpotify?: true
+    role?: true
   }
 
   export type ProfileCountAggregateInputType = {
     id?: true
     name?: true
     email?: true
-    role?: true
     conntectedSpotify?: true
     nextConnectSpotify?: true
+    role?: true
     _all?: true
   }
 
@@ -1365,11 +1365,11 @@ export namespace Prisma {
 
   export type ProfileGroupByOutputType = {
     id: string
-    name: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify: boolean
     nextConnectSpotify: Date
+    role: $Enums.UserRoles
     _count: ProfileCountAggregateOutputType | null
     _min: ProfileMinAggregateOutputType | null
     _max: ProfileMaxAggregateOutputType | null
@@ -1393,9 +1393,9 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     email?: boolean
-    role?: boolean
     conntectedSpotify?: boolean
     nextConnectSpotify?: boolean
+    role?: boolean
     partyMemberships?: boolean | Profile$partyMembershipsArgs<ExtArgs>
   }, ExtArgs["result"]["profile"]>
 
@@ -1403,30 +1403,30 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     email?: boolean
-    role?: boolean
     conntectedSpotify?: boolean
     nextConnectSpotify?: boolean
+    role?: boolean
   }, ExtArgs["result"]["profile"]>
 
   export type ProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     email?: boolean
-    role?: boolean
     conntectedSpotify?: boolean
     nextConnectSpotify?: boolean
+    role?: boolean
   }, ExtArgs["result"]["profile"]>
 
   export type ProfileSelectScalar = {
     id?: boolean
     name?: boolean
     email?: boolean
-    role?: boolean
     conntectedSpotify?: boolean
     nextConnectSpotify?: boolean
+    role?: boolean
   }
 
-  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "role" | "conntectedSpotify" | "nextConnectSpotify", ExtArgs["result"]["profile"]>
+  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "conntectedSpotify" | "nextConnectSpotify" | "role", ExtArgs["result"]["profile"]>
   export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     partyMemberships?: boolean | Profile$partyMembershipsArgs<ExtArgs>
   }
@@ -1440,11 +1440,11 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string | null
+      name: string
       email: string
-      role: $Enums.UserRoles
       conntectedSpotify: boolean
       nextConnectSpotify: Date
+      role: $Enums.UserRoles
     }, ExtArgs["result"]["profile"]>
     composites: {}
   }
@@ -1872,9 +1872,9 @@ export namespace Prisma {
     readonly id: FieldRef<"Profile", 'String'>
     readonly name: FieldRef<"Profile", 'String'>
     readonly email: FieldRef<"Profile", 'String'>
-    readonly role: FieldRef<"Profile", 'UserRoles'>
     readonly conntectedSpotify: FieldRef<"Profile", 'Boolean'>
     readonly nextConnectSpotify: FieldRef<"Profile", 'DateTime'>
+    readonly role: FieldRef<"Profile", 'UserRoles'>
   }
     
 
@@ -5869,9 +5869,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     email: 'email',
-    role: 'role',
     conntectedSpotify: 'conntectedSpotify',
-    nextConnectSpotify: 'nextConnectSpotify'
+    nextConnectSpotify: 'nextConnectSpotify',
+    role: 'role'
   };
 
   export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
@@ -5957,20 +5957,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'UserRoles'
-   */
-  export type EnumUserRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRoles'>
-    
-
-
-  /**
-   * Reference to a field of type 'UserRoles[]'
-   */
-  export type ListEnumUserRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRoles[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -5988,6 +5974,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRoles'
+   */
+  export type EnumUserRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRoles'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRoles[]'
+   */
+  export type ListEnumUserRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRoles[]'>
     
 
 
@@ -6076,21 +6076,21 @@ export namespace Prisma {
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     id?: StringFilter<"Profile"> | string
-    name?: StringNullableFilter<"Profile"> | string | null
+    name?: StringFilter<"Profile"> | string
     email?: StringFilter<"Profile"> | string
-    role?: EnumUserRolesFilter<"Profile"> | $Enums.UserRoles
     conntectedSpotify?: BoolFilter<"Profile"> | boolean
     nextConnectSpotify?: DateTimeFilter<"Profile"> | Date | string
+    role?: EnumUserRolesFilter<"Profile"> | $Enums.UserRoles
     partyMemberships?: XOR<PartyMemberNullableScalarRelationFilter, PartyMemberWhereInput> | null
   }
 
   export type ProfileOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
+    name?: SortOrder
     email?: SortOrder
-    role?: SortOrder
     conntectedSpotify?: SortOrder
     nextConnectSpotify?: SortOrder
+    role?: SortOrder
     partyMemberships?: PartyMemberOrderByWithRelationInput
   }
 
@@ -6100,20 +6100,20 @@ export namespace Prisma {
     AND?: ProfileWhereInput | ProfileWhereInput[]
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
-    name?: StringNullableFilter<"Profile"> | string | null
-    role?: EnumUserRolesFilter<"Profile"> | $Enums.UserRoles
+    name?: StringFilter<"Profile"> | string
     conntectedSpotify?: BoolFilter<"Profile"> | boolean
     nextConnectSpotify?: DateTimeFilter<"Profile"> | Date | string
+    role?: EnumUserRolesFilter<"Profile"> | $Enums.UserRoles
     partyMemberships?: XOR<PartyMemberNullableScalarRelationFilter, PartyMemberWhereInput> | null
   }, "id" | "email">
 
   export type ProfileOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
+    name?: SortOrder
     email?: SortOrder
-    role?: SortOrder
     conntectedSpotify?: SortOrder
     nextConnectSpotify?: SortOrder
+    role?: SortOrder
     _count?: ProfileCountOrderByAggregateInput
     _max?: ProfileMaxOrderByAggregateInput
     _min?: ProfileMinOrderByAggregateInput
@@ -6124,11 +6124,11 @@ export namespace Prisma {
     OR?: ProfileScalarWhereWithAggregatesInput[]
     NOT?: ProfileScalarWhereWithAggregatesInput | ProfileScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Profile"> | string
-    name?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    name?: StringWithAggregatesFilter<"Profile"> | string
     email?: StringWithAggregatesFilter<"Profile"> | string
-    role?: EnumUserRolesWithAggregatesFilter<"Profile"> | $Enums.UserRoles
     conntectedSpotify?: BoolWithAggregatesFilter<"Profile"> | boolean
     nextConnectSpotify?: DateTimeWithAggregatesFilter<"Profile"> | Date | string
+    role?: EnumUserRolesWithAggregatesFilter<"Profile"> | $Enums.UserRoles
   }
 
   export type PartyWhereInput = {
@@ -6352,69 +6352,69 @@ export namespace Prisma {
 
   export type ProfileCreateInput = {
     id: string
-    name?: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify?: boolean
     nextConnectSpotify?: Date | string
+    role: $Enums.UserRoles
     partyMemberships?: PartyMemberCreateNestedOneWithoutUserInput
   }
 
   export type ProfileUncheckedCreateInput = {
     id: string
-    name?: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify?: boolean
     nextConnectSpotify?: Date | string
+    role: $Enums.UserRoles
     partyMemberships?: PartyMemberUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type ProfileUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     partyMemberships?: PartyMemberUpdateOneWithoutUserNestedInput
   }
 
   export type ProfileUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     partyMemberships?: PartyMemberUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProfileCreateManyInput = {
     id: string
-    name?: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify?: boolean
     nextConnectSpotify?: Date | string
+    role: $Enums.UserRoles
   }
 
   export type ProfileUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
   }
 
   export type ProfileUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
   }
 
   export type PartyCreateInput = {
@@ -6641,28 +6641,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type EnumUserRolesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRolesFilter<$PrismaModel> | $Enums.UserRoles
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -6679,41 +6657,43 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type EnumUserRolesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRolesFilter<$PrismaModel> | $Enums.UserRoles
+  }
+
   export type PartyMemberNullableScalarRelationFilter = {
     is?: PartyMemberWhereInput | null
     isNot?: PartyMemberWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ProfileCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    role?: SortOrder
     conntectedSpotify?: SortOrder
     nextConnectSpotify?: SortOrder
+    role?: SortOrder
   }
 
   export type ProfileMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    role?: SortOrder
     conntectedSpotify?: SortOrder
     nextConnectSpotify?: SortOrder
+    role?: SortOrder
   }
 
   export type ProfileMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    role?: SortOrder
     conntectedSpotify?: SortOrder
     nextConnectSpotify?: SortOrder
+    role?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -6732,34 +6712,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type EnumUserRolesWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRolesWithAggregatesFilter<$PrismaModel> | $Enums.UserRoles
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRolesFilter<$PrismaModel>
-    _max?: NestedEnumUserRolesFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -6782,6 +6734,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumUserRolesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRolesWithAggregatesFilter<$PrismaModel> | $Enums.UserRoles
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRolesFilter<$PrismaModel>
+    _max?: NestedEnumUserRolesFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6820,6 +6782,21 @@ export namespace Prisma {
     not?: NestedEnumAutoplayTypeFilter<$PrismaModel> | $Enums.AutoplayType
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type QueueItemNullableScalarRelationFilter = {
     is?: QueueItemWhereInput | null
     isNot?: QueueItemWhereInput | null
@@ -6835,6 +6812,11 @@ export namespace Prisma {
     every?: QueueItemWhereInput
     some?: QueueItemWhereInput
     none?: QueueItemWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type PartyMemberOrderByRelationAggregateInput = {
@@ -6937,6 +6919,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAutoplayTypeFilter<$PrismaModel>
     _max?: NestedEnumAutoplayTypeFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BoolNullableListFilter<$PrismaModel = never> = {
@@ -7043,20 +7043,16 @@ export namespace Prisma {
     set?: string
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type EnumUserRolesFieldUpdateOperationsInput = {
-    set?: $Enums.UserRoles
-  }
-
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type EnumUserRolesFieldUpdateOperationsInput = {
+    set?: $Enums.UserRoles
   }
 
   export type PartyMemberUpdateOneWithoutUserNestedInput = {
@@ -7201,6 +7197,10 @@ export namespace Prisma {
     update?: QueueItemUpdateWithWhereUniqueWithoutPartyInput | QueueItemUpdateWithWhereUniqueWithoutPartyInput[]
     updateMany?: QueueItemUpdateManyWithWhereWithoutPartyInput | QueueItemUpdateManyWithWhereWithoutPartyInput[]
     deleteMany?: QueueItemScalarWhereInput | QueueItemScalarWhereInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type PartyMemberUncheckedUpdateManyWithoutPartyNestedInput = {
@@ -7492,27 +7492,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumUserRolesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRolesFilter<$PrismaModel> | $Enums.UserRoles
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -7527,6 +7506,13 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedEnumUserRolesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRolesFilter<$PrismaModel> | $Enums.UserRoles
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -7557,44 +7543,6 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumUserRolesWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRolesWithAggregatesFilter<$PrismaModel> | $Enums.UserRoles
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRolesFilter<$PrismaModel>
-    _max?: NestedEnumUserRolesFilter<$PrismaModel>
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -7615,6 +7563,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRolesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRoles | EnumUserRolesFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRoles[] | ListEnumUserRolesFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRolesWithAggregatesFilter<$PrismaModel> | $Enums.UserRoles
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRolesFilter<$PrismaModel>
+    _max?: NestedEnumUserRolesFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -7640,6 +7598,20 @@ export namespace Prisma {
     in?: $Enums.AutoplayType[] | ListEnumAutoplayTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.AutoplayType[] | ListEnumAutoplayTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumAutoplayTypeFilter<$PrismaModel> | $Enums.AutoplayType
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -7683,6 +7655,17 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumPlaybackStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PlaybackStatus | EnumPlaybackStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PlaybackStatus[] | ListEnumPlaybackStatusFieldRefInput<$PrismaModel>
@@ -7701,6 +7684,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAutoplayTypeFilter<$PrismaModel>
     _max?: NestedEnumAutoplayTypeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumItemStatusFilter<$PrismaModel = never> = {
@@ -8094,20 +8094,20 @@ export namespace Prisma {
 
   export type ProfileCreateWithoutPartyMembershipsInput = {
     id: string
-    name?: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify?: boolean
     nextConnectSpotify?: Date | string
+    role: $Enums.UserRoles
   }
 
   export type ProfileUncheckedCreateWithoutPartyMembershipsInput = {
     id: string
-    name?: string | null
+    name: string
     email: string
-    role: $Enums.UserRoles
     conntectedSpotify?: boolean
     nextConnectSpotify?: Date | string
+    role: $Enums.UserRoles
   }
 
   export type ProfileCreateOrConnectWithoutPartyMembershipsInput = {
@@ -8165,20 +8165,20 @@ export namespace Prisma {
 
   export type ProfileUpdateWithoutPartyMembershipsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
   }
 
   export type ProfileUncheckedUpdateWithoutPartyMembershipsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
     conntectedSpotify?: BoolFieldUpdateOperationsInput | boolean
     nextConnectSpotify?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRolesFieldUpdateOperationsInput | $Enums.UserRoles
   }
 
   export type PartyCreateWithoutQueueCurrentInput = {

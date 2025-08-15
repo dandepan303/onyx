@@ -1,10 +1,7 @@
 Dean:
   ▫ Move signin signup flow to component/auth/authflow
+    ▫ View comments at top of file
 
 Kevin:
-  ▫ Redo auth provider
-  ▫ Surround layout with auth provider
-  ▫ Redo auth protector
-  ▫ Surround layout with auth protector
-  ▫ Validate scheam
+  ▫ Migrate schema name: mandatory_name
   ▫ Figure out how to subscribe /party to somewhere so that /party role updates when there is a change

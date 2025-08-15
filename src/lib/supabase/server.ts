@@ -6,7 +6,7 @@ import { config } from '../config';
 export const createServerSupabaseClient = async () => {
   const cookieStore = await cookies();
 
-  return createServerClient(config.supabase.url, config.supabase.anonKey, {
+  return createServerClient(config.supabase.url, config.supabase.anon_key, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

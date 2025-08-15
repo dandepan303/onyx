@@ -124,9 +124,9 @@ exports.Prisma.ProfileScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  role: 'role',
   conntectedSpotify: 'conntectedSpotify',
-  nextConnectSpotify: 'nextConnectSpotify'
+  nextConnectSpotify: 'nextConnectSpotify',
+  role: 'role'
 };
 
 exports.Prisma.PartyScalarFieldEnum = {

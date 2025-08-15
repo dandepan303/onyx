@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { privateRoutes } from '@/lib/config';
-import { UserRoles as Role } from '@/lib/prisma/generated/prisma';
 import { isAuthorized } from '@/lib/util/util';
 import Loading from '@/components/ui/Loading';
 import AuthFlow from './AuthFlow';

@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { Session } from '@supabase/supabase-js';
+import { parseError } from './server_util';
 
-type RequestProps<T> = {
+type RequestProps = {
   type: 'GET' | 'POST' | 'DELETE';
   route: string;
-  body?: any;
-  session: Session;
+  body: any;
+  session?: Session | null;
 };
 
-export async function request<T>({ type, route, body, session }: RequestProps<T>): Promise<T | undefined> {
+export async function request<T>({ type, route, body, session }: RequestProps): Promise<T> {
   try {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 1000 * 60);
@@ -19,7 +20,8 @@ export async function request<T>({ type, route, body, session }: RequestProps<T>
           signal: controller.signal,
           withCredentials: true,
           validateStatus: () => true,
-          headers: { Authorization: `Bearer ${session?.access_token}` },
+          headers: session ? { Authorization: `Bearer ${session?.access_token}` } : undefined,
+          data: body,
         });
         return res;
       }
@@ -29,7 +31,7 @@ export async function request<T>({ type, route, body, session }: RequestProps<T>
           signal: controller.signal,
           withCredentials: true,
           validateStatus: () => true,
-          headers: { Authorization: `Bearer ${session?.access_token}` },
+          headers: session ? { Authorization: `Bearer ${session?.access_token}` } : undefined,
         });
         return res;
       }
@@ -39,15 +41,29 @@ export async function request<T>({ type, route, body, session }: RequestProps<T>
           signal: controller.signal,
           withCredentials: true,
           validateStatus: () => true,
-          headers: { Authorization: `Bearer ${session?.access_token}` },
+          headers: session ? { Authorization: `Bearer ${session?.access_token}` } : undefined,
         });
         return res;
       }
       default:
-        throw new Error('lib/util/api error: select a valid request type');
+        break;
     }
+
+    throw new Error(`lib/util/api error: select a valid request type`);
   } catch (e: any) {
     console.log(`lib/util/api error`);
-    return { status: 'error', message: e.message } as any;
+    await parseError(e.message, e.code);
+    throw new Error('lib/util/api error');
+  }
+}
+
+export function verifyBody<T>(body: any, route: string): boolean {
+  try {
+    const attempt: T = body;
+
+    return true;
+  } catch (e: any) {
+    console.error(`${route} error: `, e);
+    return false;
   }
 }

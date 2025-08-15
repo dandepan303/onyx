@@ -1,15 +1,20 @@
-import { Role } from '@/types';
+import { UserRoles } from './prisma/generated/prisma';
 
 // Middleware
-export const privateRoutes: Record<string, Role> = {
-  '/developer': 'admin',
-  '/dashboard': 'user',
+export const privateRoutes: Record<string, UserRoles> = {
+  '/developer': 'ADMIN',
+  '/dashboard': 'USER',
 };
 
 // formatted env variables
 export const config = {
   app: {
-    name: process.env.NEXT_PUBLIC_APP_NAME || 'TradeSpace',
+    name: process.env.NEXT_PUBLIC_APP_NAME || 'Jam',
+  },
+  supabase: {
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    anon_key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+    service_role_key: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   },
   google: {
     client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',

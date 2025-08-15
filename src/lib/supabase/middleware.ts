@@ -1,6 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { Role } from '@/types';
 import { isAuthorized } from '@/lib/util/util';
 import { privateRoutes } from '../config';
 
