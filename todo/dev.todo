@@ -4,4 +4,5 @@ Dean:
 
 Kevin:
   ▫ Migrate schema name: mandatory_name
+  ▫ Fix/make api for musicplayer all that bc im ignoring in eslint.config.mjs
   ▫ Figure out how to subscribe /party to somewhere so that /party role updates when there is a change

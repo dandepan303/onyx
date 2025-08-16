@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server"
 
-export type PostProps = {
 
-}
+export type PostProps = Record<string, never>;
 
-export type PostRet = {
+export type PostRet = Record<string, never>;
 
-}
-
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   return NextResponse.json<PostRet>({});
 }

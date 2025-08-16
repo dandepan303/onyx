@@ -2,13 +2,19 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from './AuthProvider';
+import { UserRoles } from '@/lib/prisma/generated/prisma';
 import { supabase } from '@/lib/supabase/client';
 import { parseError } from '@/lib/util/server_util';
 import { PostProps as GooglePostProps, PostRet as GooglePostRet } from '@/app/api/auth/google/route';
-import { GetProps as EmailGetProps, GetRet as EmailGetRet, PostProps as EmailPostProps, PostRet as EmailPostRet } from '@/app/api/auth/email/route';
+import { GetRet as EmailGetRet, PostProps as EmailPostProps, PostRet as EmailPostRet } from '@/app/api/auth/email/route';
 import { request } from '@/lib/util/api';
 import GoogleAuthButton from './GoogleButton';
 import { MdArrowForwardIos } from 'react-icons/md';
+
+interface GoogleAuthResponse {
+  credential: string;
+  [key: string]: unknown;
+}
 
 export default function AuthFlow() {
   const [status, setStatus] = useState<{
@@ -36,7 +42,7 @@ export default function AuthFlow() {
     setStatus(prev => (prev.status === 'page-loading' ? { status: 'null', message: '' } : prev));
   }, []);
 
-  const verifyInputs = ({
+  const verifyInputs = useCallback(({
     checkEmail = false,
     checkPassword = false,
     checkName = false,
@@ -76,10 +82,10 @@ export default function AuthFlow() {
     }
 
     return { isValidInputs: true, msg: '' };
-  };
+  }, [email, password, name, confirmPassword]);
 
   const handleGoogleAuth = useCallback(
-    async (response: any) => {
+    async (response: GoogleAuthResponse) => {
       setPageType('google');
       setStatus({ status: 'loading', message: '' });
 
@@ -103,7 +109,7 @@ export default function AuthFlow() {
           id: auth_data.user.id,
           name: auth_data.user.user_metadata.name,
           email: auth_data.user.email,
-          role: 'GUEST',
+          role: UserRoles.GUEST, // Use enum instead of string
         };
         
         const res: GooglePostRet = await request<GooglePostRet>({ 
@@ -113,8 +119,10 @@ export default function AuthFlow() {
         });
 
         setStatus({ status: res.status, message: res.message });
-      } catch (err: any) {
-        console.log('Google auth error: ', await parseError(err.message, err.code));
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        const errorCode = err && typeof err === 'object' && 'code' in err ? (err.code as string) : undefined;
+        console.log('Google auth error: ', await parseError(errorMessage, errorCode));
         setStatus({ status: 'error', message: 'there was an issue with google. please try again.' });
       } finally {
         setPageType('step-one');
@@ -157,12 +165,14 @@ export default function AuthFlow() {
           setStatus({ status: 'success', message: 'successfully signed in' });
         }
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log('Step one error');
-      await parseError(e.message, e.code);
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+      const errorCode = e && typeof e === 'object' && 'code' in e ? (e.code as string) : undefined;
+      await parseError(errorMessage, errorCode);
       setStatus({ status: 'error', message: 'there was an issue signing in' });
     }
-  }, [setStatus, email, password, signIn]);
+  }, [setStatus, email, password, signIn, verifyInputs]);
 
   const handleEmailAuthStepTwo = useCallback(async () => {
     try {
@@ -192,7 +202,7 @@ export default function AuthFlow() {
         email: email,
         password: password,
         name: name,
-        role: 'USER',
+        role: UserRoles.USER, // Use enum instead of string
       };
       
       const res: EmailPostRet = await request<EmailPostRet>({ 
@@ -215,18 +225,22 @@ export default function AuthFlow() {
           } else {
             setStatus({ status: 'success', message: `${res.message} successfully signed in!` });
           }
-        } catch (e: any) {
+        } catch (e: unknown) {
           console.log('Auto sign in error');
-          await parseError(e.message, e.code);
+          const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+          const errorCode = e && typeof e === 'object' && 'code' in e ? (e.code as string) : undefined;
+          await parseError(errorMessage, errorCode);
           setStatus({ status: 'error', message: `${res.message} please sign in manually.` });
         }
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log('Step two error');
-      await parseError(e.message, e.code);
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+      const errorCode = e && typeof e === 'object' && 'code' in e ? (e.code as string) : undefined;
+      await parseError(errorMessage, errorCode);
       setStatus({ status: 'error', message: 'there was an issue signing up' });
     }
-  }, [setStatus, email, password, name, confirmPassword, signIn]);
+  }, [setStatus, email, password, name, signIn, verifyInputs]);
 
   const handleBackToStepOne = () => {
     setPageType('step-one');

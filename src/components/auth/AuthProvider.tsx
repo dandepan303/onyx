@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, AuthError } from '@supabase/supabase-js';
 import { Profile } from '@/lib/prisma/generated/prisma';
 import { supabase } from '@/lib/supabase/client';
 import axios from 'axios';
@@ -11,7 +11,7 @@ interface AuthContextType {
   user: { data: User | null; loading: boolean };
   profile: { data: Profile | null; loading: boolean };
   session: { data: Session | null; loading: boolean };
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   getUser: () => Promise<User | null>;
   version: number;
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         setProfile({ data: null, loading: false });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log('Error fetching profile:', error);
       setProfile({ data: null, loading: false });
     }
@@ -69,8 +69,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
       return { error };
-    } catch (error: any) {
-      return { error };
+    } catch (error: unknown) {
+      // If it's not an AuthError, wrap it as a generic error
+      const authError = error instanceof Error 
+        ? { message: error.message, name: 'AuthError' } as AuthError
+        : { message: 'Unknown authentication error', name: 'AuthError' } as AuthError;
+      return { error: authError };
     }
   };
 
@@ -92,9 +96,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('/components/auth-provider get_user error');
-      parseError(error?.message, error?.code);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorCode = error && typeof error === 'object' && 'code' in error 
+        ? (error.code as string) 
+        : undefined;
+      parseError(errorMessage, errorCode);
       return null;
     }
   };

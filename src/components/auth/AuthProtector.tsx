@@ -14,19 +14,21 @@ interface AuthProtecterProps {
 }
 
 export default function AuthProtecter({ children, className }: AuthProtecterProps) {
-  const [stage, setStage] = useState<'loading' | 'auth_required' | 'success'>();
+  const [stage, setStage] = useState<'loading' | 'auth_required' | 'success'>('loading');
 
   const { profile } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '';
 
   useEffect(() => {
-    if (profile.loading) return;
+    if (profile.loading || !pathname) return;
 
     async function exec() {
       const userRole = profile?.data?.role ?? 'GUEST';
 
-      const requiredRole = Object.entries(privateRoutes).find(([route]) => pathname.startsWith(route))?.[1];
+      const requiredRole = Object.entries(privateRoutes).find(
+        ([route]) => pathname.startsWith(route)
+      )?.[1];
 
       if (requiredRole && !isAuthorized(userRole, requiredRole)) {
         router.push('/auth/sign-in/');

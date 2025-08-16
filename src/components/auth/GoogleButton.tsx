@@ -4,25 +4,48 @@ import { config } from '@/lib/config';
 import { useEffect, useRef, useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 
+interface GoogleAccountsConfig {
+  client_id: string;
+  callback: (response: GoogleAuthResponse) => void;
+  auto_select?: boolean;
+  itp_support?: boolean;
+}
+
+interface GoogleRenderConfig {
+  type?: string;
+  shape?: string;
+  theme?: string;
+  text?: string;
+  size?: string;
+  logo_alignment?: string;
+}
+
+interface GoogleAuthResponse {
+  credential: string;
+  [key: string]: unknown;
+}
+
 declare global {
   interface Window {
     google?: {
       accounts?: {
         id?: {
-          initialize?: (config: any) => void;
-          renderButton?: (element: HTMLElement, config: any) => void;
+          initialize?: (config: GoogleAccountsConfig) => void;
+          renderButton?: (element: HTMLElement, config: GoogleRenderConfig) => void;
           prompt?: () => void;
         };
       };
     };
-    googleAuthCallback?: (response: any) => void;
+    googleAuthCallback?: (response: GoogleAuthResponse) => void;
   }
 }
 
 interface GoogleAuthButtonProps {
-  handleGoogleAuthCallback: (response: any) => void;
-  setStatus: ({ status, message }: { status: any; message: string }) => void;
-  buttonText: 'signin_with' | 'signup_with' | 'continue_with';
+  handleGoogleAuthCallback: (response: GoogleAuthResponse) => void;
+  setStatus: ({ status, message }: { 
+    status: 'success' | 'error' | 'page-loading' | 'loading' | 'null'; 
+    message: string 
+  }) => void;  buttonText: 'signin_with' | 'signup_with' | 'continue_with';
   buttonContext: 'signin' | 'signup' | 'use';
 }
 
@@ -47,8 +70,7 @@ export default function GoogleAuthButton({
     if (window.google?.accounts?.id?.prompt) {
       try {
         window.google.accounts.id.prompt();
-      } catch (error) {
-        console.error('Error calling Google prompt:', error);
+      } catch {
         setStatus({ status: 'error', message: 'Google authentication is not available.' });
       }
     } else {
@@ -69,7 +91,7 @@ export default function GoogleAuthButton({
 
         try {
           // Set up global callback
-          window.googleAuthCallback = (response: any) => {
+          window.googleAuthCallback = (response: GoogleAuthResponse) => {
             handleGoogleAuthCallbackRef.current(response);
           };
 
@@ -150,7 +172,7 @@ export default function GoogleAuthButton({
                   
                   setStatus({ status: 'null', message: '' });
                 }, 100);
-              } catch (error) {
+              } catch {
                 console.log('Native Google button failed, using custom button');
                 setUseCustomButton(true);
               }
@@ -158,8 +180,8 @@ export default function GoogleAuthButton({
               setUseCustomButton(true);
             }
           }, 100);
-        } catch (error) {
-          console.log('Error initializing Google Auth:', error);
+        } catch {
+          console.log('Error initializing Google Auth');
           setUseCustomButton(true);
           setStatus({ status: 'error', message: 'Failed to initialize Google authentication.' });
         }

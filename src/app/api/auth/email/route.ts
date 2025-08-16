@@ -13,11 +13,16 @@ export type GetRet = {
   message: string;
 }
 
+// Import or define UserRoles type - adjust this import based on your actual schema location
+import { UserRoles } from "@/lib/prisma/generated/prisma";
+// OR if it's an enum, define it like:
+// type UserRoles = 'USER' | 'ADMIN' | 'GUEST' | 'MODERATOR';
+
 export type PostProps = {
   email: string;
   password: string;
   name: string;
-  role: string;
+  role: UserRoles;
 };
 
 export type PostRet = {
@@ -33,9 +38,9 @@ export async function GET(request: Request) {
     const email = searchParams.get('email');
 
     if (!email) {
-      return NextResponse.json<GetRet>({ 
-        status: 'error', 
-        message: 'Please provide email' 
+      return NextResponse.json<GetRet>({
+        status: 'error',
+        message: 'Please provide email'
       }, { status: 400 });
     }
 
@@ -50,13 +55,14 @@ export async function GET(request: Request) {
 
     // No profile -> continue to sign up (step 2)
     return NextResponse.json<GetRet>({ status: 'signup', message: '' });
-
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log('api/auth/email get error');
-    await parseError(e.message, e.code);
-    return NextResponse.json<GetRet>({ 
-      status: 'error', 
-      message: 'There was an issue checking email' 
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    const errorCode = e && typeof e === 'object' && 'code' in e ? (e.code as string) : undefined;
+    await parseError(errorMessage, errorCode);
+    return NextResponse.json<GetRet>({
+      status: 'error',
+      message: 'There was an issue checking email'
     }, { status: 500 });
   }
 }
@@ -64,16 +70,26 @@ export async function GET(request: Request) {
 // Step 2: sign up
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as any;
-    
-    if (!verifyBody(body, 'api/auth/email')) {
-      return NextResponse.json<PostRet>({ 
-        status: 'error', 
-        message: 'Please provide all required information' 
+    const body: unknown = await request.json();
+
+    if (!verifyBody<PostProps>(body, 'api/auth/email')) {
+      return NextResponse.json<PostRet>({
+        status: 'error',
+        message: 'Please provide all required information'
       }, { status: 400 });
     }
 
-    const { email, password, name, role } = body;
+    // Type assertion is safe here because verifyBody returned true
+    const { email, password, name, role } = body as PostProps;
+
+    // Additional validation for role
+    const validRoles: UserRoles[] = [UserRoles.GUEST, UserRoles.USER, UserRoles.ADMIN];
+    if (!validRoles.includes(role)) {
+      return NextResponse.json<PostRet>({
+        status: 'error',
+        message: 'Invalid role provided'
+      }, { status: 400 });
+    }
 
     // Check if profile already exists
     const profile = await prisma.profile.findUnique({
@@ -81,14 +97,13 @@ export async function POST(request: Request) {
     });
 
     if (profile) {
-      return NextResponse.json<PostRet>({ 
-        status: 'error', 
-        message: 'Account already exists' 
+      return NextResponse.json<PostRet>({
+        status: 'error',
+        message: 'Account already exists'
       }, { status: 400 });
     }
 
     const supabase = await createServerSupabaseClient();
-    
     const { data: auth_data, error: auth_error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -102,17 +117,17 @@ export async function POST(request: Request) {
 
     if (auth_error) {
       console.log('api/auth/email post auth error: ', auth_error);
-      return NextResponse.json<PostRet>({ 
-        status: 'error', 
-        message: await parseError(auth_error.message, auth_error.code) 
+      return NextResponse.json<PostRet>({
+        status: 'error',
+        message: await parseError(auth_error.message, auth_error.code)
       }, { status: 400 });
     }
 
     if (!auth_data.user) {
       console.log('api/auth/email post error - no user data');
-      return NextResponse.json<PostRet>({ 
-        status: 'error', 
-        message: 'There was an issue creating account' 
+      return NextResponse.json<PostRet>({
+        status: 'error',
+        message: 'There was an issue creating account'
       }, { status: 400 });
     }
 
@@ -126,17 +141,18 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json<PostRet>({ 
-      status: 'success', 
-      message: 'Successfully signed up' 
+    return NextResponse.json<PostRet>({
+      status: 'success',
+      message: 'Successfully signed up'
     });
-
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log('api/auth/email post error');
-    await parseError(e.message, e.code);
-    return NextResponse.json<PostRet>({ 
-      status: 'error', 
-      message: 'There was an issue signing up' 
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    const errorCode = e && typeof e === 'object' && 'code' in e ? (e.code as string) : undefined;
+    await parseError(errorMessage, errorCode);
+    return NextResponse.json<PostRet>({
+      status: 'error',
+      message: 'There was an issue signing up'
     }, { status: 500 });
   }
 }
