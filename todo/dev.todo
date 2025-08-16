@@ -1,6 +1,6 @@
 Dean:
-  ▫ Move signin signup flow to component/auth/authflow
-    ▫ View comments at top of file
+  ✔ Move signin signup flow to component/auth/authflow @done(25-08-16 11:39)
+    ✔ View comments at top of file @done(25-08-16 11:39)
 
 Kevin:
   ▫ Migrate schema name: mandatory_name
