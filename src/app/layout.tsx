@@ -4,6 +4,7 @@ import './globals.css';
 import '../styles/MusicPlayer.css';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import AuthProtecter from '@/components/auth/AuthProtector';
+import Script from 'next/script'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,6 +31,10 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           <AuthProtecter>{children}</AuthProtecter>
+          <Script
+            src="https://accounts.google.com/gsi/client"
+            strategy="lazyOnload"
+          />
         </AuthProvider>
       </body>
     </html>

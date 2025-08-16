@@ -182,7 +182,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/kevinboriboonsomsin/GitHub/onyx/src/lib/prisma/generated/prisma",
+      "value": "/Users/dean/onyx/src/lib/prisma/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -196,12 +196,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/kevinboriboonsomsin/GitHub/onyx/prisma/schema.prisma",
+    "sourceFilePath": "/Users/dean/onyx/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../../../prisma",
   "clientVersion": "6.14.0",
@@ -210,7 +209,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {

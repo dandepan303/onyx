@@ -112,8 +112,10 @@ body {
 
 .morph-container.morphing {
   width: 340px;
-  height: 380px; /* Increased height to accommodate sign up form */
-  background: #000000; /* solid black background */
+  height: auto; /* Changed from fixed 250px to auto */
+  min-height: 400px; /* Added minimum height */
+  max-height: 500px; /* Added maximum height to prevent overflow */
+  background: #000000;
   border-radius: 16px;
   border-color: #555;
   cursor: default;
@@ -471,4 +473,13 @@ body {
 
 .morph-container:not(.morphing):active {
   transform: translateY(0);
+}
+
+/* Dialog inner wrapper for better content control */
+.dialog-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  min-height: fit-content;
 }

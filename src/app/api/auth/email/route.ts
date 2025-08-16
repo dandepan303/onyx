@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { verifyBody } from "@/lib/util/api";
 import { parseError } from "@/lib/util/server_util";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
 
 export type GetProps = {
   email: string;
@@ -27,25 +28,36 @@ export type PostRet = {
 // Step 1: Check if email already exists -> sign in
 export async function GET(request: Request) {
   try {
-    const body = (await request.json()) as any;
-    if (!verifyBody(body, 'api/auth/email'))
-      return NextResponse.json<GetRet>({ status: 'error', message: 'Please provide all required information' }, { status: 400 });
+    // Get email from URL parameters instead of body
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get('email');
 
-    const { email } = body;
+    if (!email) {
+      return NextResponse.json<GetRet>({ 
+        status: 'error', 
+        message: 'Please provide email' 
+      }, { status: 400 });
+    }
 
     const profile = await prisma.profile.findUnique({
       where: { email: email }
     });
 
-    // Profile -> continue to sign in
-    if (profile) return NextResponse.json<GetRet>({ status: 'signin', message: '' });
-    
+    // Profile exists -> continue to sign in
+    if (profile) {
+      return NextResponse.json<GetRet>({ status: 'signin', message: '' });
+    }
+
     // No profile -> continue to sign up (step 2)
     return NextResponse.json<GetRet>({ status: 'signup', message: '' });
+
   } catch (e: any) {
     console.log('api/auth/email get error');
     await parseError(e.message, e.code);
-    return NextResponse.json<GetRet>({ status: 'error', message: 'There was an issue signing in' });
+    return NextResponse.json<GetRet>({ 
+      status: 'error', 
+      message: 'There was an issue checking email' 
+    }, { status: 500 });
   }
 }
 
@@ -53,18 +65,30 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as any;
-    if (!verifyBody(body, 'api/auth/email'))
-      return NextResponse.json<PostRet>({ status: 'error', message: 'Please provide all required information' }, { status: 400 });
+    
+    if (!verifyBody(body, 'api/auth/email')) {
+      return NextResponse.json<PostRet>({ 
+        status: 'error', 
+        message: 'Please provide all required information' 
+      }, { status: 400 });
+    }
 
     const { email, password, name, role } = body;
 
+    // Check if profile already exists
     const profile = await prisma.profile.findUnique({
       where: { email: email }
     });
 
-    if (profile) return NextResponse.json<PostRet>({ status: 'success', message: '' });
+    if (profile) {
+      return NextResponse.json<PostRet>({ 
+        status: 'error', 
+        message: 'Account already exists' 
+      }, { status: 400 });
+    }
 
     const supabase = await createServerSupabaseClient();
+    
     const { data: auth_data, error: auth_error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -77,14 +101,22 @@ export async function POST(request: Request) {
     });
 
     if (auth_error) {
-      console.log('api/auth/email post error: ');
-      return NextResponse.json<PostRet>({ status: 'error', message: await parseError(auth_error.message, auth_error.code) }, { status: 400 });
+      console.log('api/auth/email post auth error: ', auth_error);
+      return NextResponse.json<PostRet>({ 
+        status: 'error', 
+        message: await parseError(auth_error.message, auth_error.code) 
+      }, { status: 400 });
     }
+
     if (!auth_data.user) {
-      console.log('api/auth/email post error');
-      return NextResponse.json<PostRet>({ status: 'error', message: 'There was an issue signing up' }, { status: 400 });
+      console.log('api/auth/email post error - no user data');
+      return NextResponse.json<PostRet>({ 
+        status: 'error', 
+        message: 'There was an issue creating account' 
+      }, { status: 400 });
     }
-    
+
+    // Create profile in database
     await prisma.profile.create({
       data: {
         id: auth_data.user.id,
@@ -94,10 +126,17 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json<PostRet>({ status: 'success', message: 'Successfully signed up' });
+    return NextResponse.json<PostRet>({ 
+      status: 'success', 
+      message: 'Successfully signed up' 
+    });
+
   } catch (e: any) {
     console.log('api/auth/email post error');
     await parseError(e.message, e.code);
-    return NextResponse.json<PostRet>({ status: 'error', message: 'There was an issue signing up' }, { status: 500 });
+    return NextResponse.json<PostRet>({ 
+      status: 'error', 
+      message: 'There was an issue signing up' 
+    }, { status: 500 });
   }
 }
